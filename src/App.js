@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Canvas from './Canvas.js';
+import Box from './Box.js';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.colorList = ['blue', 'red', 'green', 'yellow', 'orange', 'purple'];
+
+    this.state = {
+      boxList: [],
+      boxCounter: 0
+    }
+
+    this.handleNewBox = this.handleNewBox.bind(this);
+  }
+
+  handleNewBox(boxStyle) {
+    let newBoxStyle = Object.assign({}, boxStyle);
+    newBoxStyle.zIndex = 0;
+
+    this.setState(prevState => ({
+      boxList: [...prevState.boxList, <Box initialBoxStyle={boxStyle} key={JSON.stringify(boxStyle)}/>]
+    }));
+  }
+
+  render() {
+    return (
+      <div>
+        <Canvas boxColor={this.colorList[this.state.boxList.length % this.colorList.length]} finishNewBox={this.handleNewBox}/>
+        {this.state.boxList}
+      </div>
+    );
+  }
 }
-
-export default App;
