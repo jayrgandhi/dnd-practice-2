@@ -1,5 +1,6 @@
 import React from 'react';
 import './Canvas.css';
+import { ShapeContext } from './ShapeContext.js';
 
 export default class Canvas extends React.Component {
   constructor(props) {
@@ -75,15 +76,27 @@ export default class Canvas extends React.Component {
       width = this.state.originX - event.clientX;
     }
 
-    this.setState({
-      boxStyle: {
-        left: left,
-        top: top,
-        height: height,
-        width: width,
-        backgroundColor: this.props.boxColor
-      }
-    });
+    if (this.context.shape === 'solid') {
+      this.setState({
+        boxStyle: {
+          left: left,
+          top: top,
+          height: height,
+          width: width,
+          backgroundColor: this.props.boxColor
+        }
+      });
+    } else {
+      this.setState({
+        boxStyle: {
+          left: left,
+          top: top,
+          height: height,
+          width: width,
+          border: `1px solid ${this.props.boxColor}`
+        }
+      });
+    }
   }
 
   handleMouseUp(event) {
@@ -100,3 +113,4 @@ export default class Canvas extends React.Component {
   }
 }
 
+Canvas.contextType = ShapeContext;
